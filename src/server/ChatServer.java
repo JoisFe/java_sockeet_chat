@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 public class ChatServer {
     private final ConcurrentHashMap<String, DataOutputStream> clientOutMap = new ConcurrentHashMap();
@@ -21,11 +22,11 @@ public class ChatServer {
         try (ServerSocket serverSocket = new ServerSocket(8888)) {
             System.out.println(getTime() + " Start server " + serverSocket.getLocalSocketAddress());
             while (true) {
-                try {
-                    Socket socket = serverSocket.accept();
+                try(Socket socket = serverSocket.accept();) {
                     ClientSession client = new ClientSession(socket);
                     client.start();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -60,6 +61,7 @@ public class ChatServer {
             try {
                 out.writeUTF(message);
             } catch (IOException e) {
+
             }
         }
     }
