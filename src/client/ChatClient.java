@@ -28,8 +28,7 @@ public class ChatClient {
     }
 
     private void connect(String severHost, int port) {
-        try {
-            Socket socket = new Socket(severHost, port);
+        try(Socket socket = new Socket(severHost, port);) {
             System.out.println("Connected to Server " + severHost + ":" + port);
             Thread sender = new Sender(socket, id);
             Thread receiver = new Receiver(socket);
